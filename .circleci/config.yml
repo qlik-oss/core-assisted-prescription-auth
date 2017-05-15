@@ -5,7 +5,7 @@ jobs:
       - image: node:7
     working_directory: ~/qliktive-authentication-service
     environment:
-      DOCKER_REPO: qlik/qliktive-authentication-service
+      DOCKER_REPO: qlikea/qliktive-authentication-service
     steps:
       - checkout
       - run:
@@ -33,7 +33,7 @@ jobs:
           name: Build Docker image
           command: |
             VER=$(cat ./version.txt)
-            ./scripts/build-docker-image.sh -t $VER $DOCKER_REPO
+            docker build -t $DOCKER_REPO:$VER .
       - deploy:
           name: Push image to Docker Hub
           command: |
