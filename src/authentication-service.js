@@ -98,7 +98,7 @@ function initiate(opt) {
           });
         }
 
-        console.log('Couldn\'t fetch profile'); // eslint-disable-line
+        console.log('Couldn\'t authenticate ', authenticationErr); // eslint-disable-line
         return ctx.redirect(`/login/${ctx.params.idp}/failed`);
       })(ctx, next);
     }
@@ -121,6 +121,7 @@ function initiate(opt) {
 
     // TODO: Fix promise with below in above
     ctx.cookies.set(options.sessionCookieName, null);
+    ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
     ctx.response.body = 'User is logouted';
     next();
   });
