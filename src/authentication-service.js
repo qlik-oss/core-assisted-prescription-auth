@@ -106,24 +106,30 @@ function initiate(opt) {
     return next();
   });
 
-  router.get('/logout', (ctx, next) => {
+  router.get('/logout', (ctx) => {
     const sessionId = ctx.cookies.get(options.sessionCookieName);
 
-    redisClient.del(sessionId, (err, reply) => {
-      if (!err) {
-        if (reply === 1) {
-          console.log('Session removed from db: ', sessionId); // eslint-disable-line
-        } else {
-          console.log('Session ', sessionId, ' doesn\'t exist'); // eslint-disable-line
+    const p = new Promise((resolve, reject) => {
+      redisClient.del(sessionId, (err, reply) => {
+        if (!err) {
+          if (reply === 1) {
+            console.log('Session removed from db: ', sessionId); // eslint-disable-line
+            resolve(reply);
+          } else {
+            console.log('Session ', sessionId, ' doesn\'t exist'); // eslint-disable-line
+            reject(err);
+          }
         }
-      }
+      });
     });
 
-    // TODO: Fix promise with below in above
-    ctx.cookies.set(options.sessionCookieName, null);
-    ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
-    ctx.response.body = 'User is logouted';
-    next();
+    return p.then(() => {
+      ctx.cookies.set(options.sessionCookieName, null);
+      ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
+      ctx.response.body = 'User has logged out';
+    }).catch((err) => {
+      ctx.throw(500, err);
+    });
   });
 
   app
