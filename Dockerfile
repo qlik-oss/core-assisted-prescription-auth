@@ -6,4 +6,4 @@ RUN npm install --quiet
 COPY . ./
 RUN npm run lint
 EXPOSE "3000"
-CMD ["npm", "start", "--silent"]
+ENTRYPOINT ["npm", "start", "--silent"]

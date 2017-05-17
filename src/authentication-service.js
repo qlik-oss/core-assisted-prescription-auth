@@ -14,7 +14,7 @@ function initiate(opt) {
 
   // TODO: Populate setting + credentials???
   const redisClient = redis.createClient({
-    host: options.redisHost || 'localhost',
+    host: options.redisHost || 'redis',
     port: options.redisPort || 6379
   });
 
