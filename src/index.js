@@ -6,16 +6,17 @@ const options = commandLineArgs([
   { name: 'clientId', type: String },
   { name: 'clientSecret', type: String },
   { name: 'port', type: Number, defaultValue: 3000 },
-  { name: 'cookieKey', type: String, defaultValue: 'Qlikative'}
+  { name: 'sessionCookieName', type: String, defaultValue: 'Qlikative' }
 ]);
 
 AuthenticationService.initialize({
   strategy: githubPassportStrategy.strategy({
     port: options.port,
     clientId: options.clientId,
-    clientSecret: options.clientSecret}
+    clientSecret: options.clientSecret }
   ),
+
   scope: githubPassportStrategy.scope,
   port: options.port,
-  cookieKey: options.cookieKey
+  sessionCookieName: options.sessionCookieName
 });

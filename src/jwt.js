@@ -1,15 +1,15 @@
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-var header = {
+const header = {
   algorithm: 'HS256'
 };
 
-function getJWT(profile){
-  var payload = {
+function getJWT(profile) {
+  const payload = {
     sub: profile.name
   };
 
-  var secret = 'hemligt';
+  const secret = 'hemligt';
 
   return jwt.sign(payload, secret, header);
 }
