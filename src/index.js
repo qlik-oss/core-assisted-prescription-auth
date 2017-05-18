@@ -1,6 +1,7 @@
 const AuthenticationService = require('./authentication-service');
 const githubPassportStrategy = require('./github-passport-strategy');
 const commandLineArgs = require('command-line-args');
+const logger = require('./logger/logger').get();
 
 const options = commandLineArgs([
   { name: 'clientId', type: String, defaultValue: process.env.GITHUB_CLIENT_ID },
@@ -8,6 +9,8 @@ const options = commandLineArgs([
   { name: 'port', type: Number, defaultValue: 3000 },
   { name: 'sessionCookieName', type: String, defaultValue: process.env.SESSION_COOKIE_NAME }
 ]);
+
+logger.warn("MY SECRETS ", options);
 
 AuthenticationService.initialize({
   strategy: githubPassportStrategy.strategy({
