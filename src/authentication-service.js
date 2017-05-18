@@ -126,7 +126,7 @@ function initiate(opt) {
     return p.then(() => {
       ctx.cookies.set(options.sessionCookieName, null);
       ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
-      ctx.response.body = 'User has logged out';
+      ctx.response.body = 'Logged out';
     }).catch((err) => {
       ctx.throw(500, err);
     });
