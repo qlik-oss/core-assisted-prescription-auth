@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const Router = require('koa-router');
 const passport = require('koa-passport');
-const Promise = require('bluebird');
 
 const redis = require('redis');
 
