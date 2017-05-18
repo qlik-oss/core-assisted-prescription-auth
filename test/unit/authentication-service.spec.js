@@ -112,7 +112,7 @@ describe('endpoints', () => {
     chai.request(autenticationService).get('/logout')
       .end((err, res) => {
         expect(res.status).to.eql(200);
-        expect(res.text).to.eql('logout');
+        expect(res.text).to.eql('Logged out');
         done();
       });
   });

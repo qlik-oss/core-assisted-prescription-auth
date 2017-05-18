@@ -17,8 +17,7 @@ function githubPassportStrategy(options) {
   return new GitHubStrategy(
     {
       clientID: options.clientId,
-      clientSecret: options.clientSecret,
-      callbackURL: `http://localhost:${options.port}/login/github/callback`
+      clientSecret: options.clientSecret
     },
     (accessToken, refreshToken, profile, done) => approvedMember(accessToken, profile, done));
 }
