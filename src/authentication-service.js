@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const passport = require('koa-passport');
 
+const logger = require('./logger/logger').get();
 const redis = require('redis');
 
 const getJWT = require('./jwt');
@@ -115,7 +116,6 @@ function initiate(opt) {
             logger.info('Session removed from db: ', sessionId);
             resolve(reply);
           } else {
-
             logger.warn('Session removed from db: ', sessionId);
             reject(err);
           }
