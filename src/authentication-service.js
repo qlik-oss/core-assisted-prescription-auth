@@ -76,7 +76,7 @@ function initiate(opt) {
           const p = new Promise((resolve, reject) => {
             redisClient.set(sessionId, jwt, (dbErr, reply) => {
               if (!dbErr) {
-                logger.info('Session entered into db: ', sessionId, jwt);
+                logger.info('Session stored in database: ', sessionId, jwt);
                 resolve(reply);
               } else {
                 reject(dbErr);
@@ -94,11 +94,11 @@ function initiate(opt) {
 
             ctx.redirect(`/login/${ctx.params.idp}/succeeded`);
           }).catch((err) => {
-            logger.error('Something when wrong creating session ', err);
+            logger.error('Failed to create session ', err);
           });
         }
 
-        logger.error('Couldn\'t authenticate ', authenticationErr);
+        logger.error('Failed to authenticate ', authenticationErr);
         return ctx.redirect(`/login/${ctx.params.idp}/failed`);
       })(ctx, next);
     }
@@ -113,10 +113,10 @@ function initiate(opt) {
       redisClient.del(sessionId, (err, reply) => {
         if (!err) {
           if (reply === 1) {
-            logger.info('Session removed from db: ', sessionId);
+            logger.info('Session removed from database: ', sessionId);
             resolve(reply);
           } else {
-            logger.warn('Session removed from db: ', sessionId);
+            logger.warn('No session found to remove from database: ', sessionId);
             reject(err);
           }
         }
