@@ -44,8 +44,8 @@ function initiate(opt) {
   const router = new Router();
 
   router.get('/login/', (ctx, next) => {
-    //Will redirec to github by default since we don't have any other IDPs
-    ctx.redirect(`/login/github`);
+    // Will redirec to github by default since we don't have any other IDPs
+    ctx.redirect('/login/github');
     next();
   });
 
