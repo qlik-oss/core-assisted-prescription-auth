@@ -43,6 +43,12 @@ function initiate(opt) {
 
   const router = new Router();
 
+  router.get('/login/', (ctx, next) => {
+    //Will redirec to github by default since we don't have any other IDPs
+    ctx.redirect(`/login/github`);
+    next();
+  });
+
   router.get('/login/:idp/succeeded', (ctx) => {
     if (validStrategy(ctx.params.idp)) {
       ctx.response.body = 'succeeded';
@@ -92,7 +98,7 @@ function initiate(opt) {
               // secure: true //Should be turned on when we have https going
             });
 
-            ctx.redirect(`/login/${ctx.params.idp}/succeeded`);
+            ctx.redirect(options.successRedirectUrl);
           }).catch((err) => {
             logger.error('Failed to create session ', err);
           });
