@@ -67,7 +67,7 @@ function initiate(opt) {
     if (validStrategy(ctx.params.idp)) {
       return passport.authenticate(ctx.params.idp, (authenticationErr, profile) => {
         if (profile) {
-          console.log('Authenticated and this is the jwt: ', getJWT(profile)); // eslint-disable-line
+          logger.info('Authenticated and this is the jwt: ', getJWT(profile));
 
           const jwt = getJWT(profile);
           const sessionId = Math.floor(Math.random() * Date.now()); // TODO: MAKE IT GOOD!
@@ -75,7 +75,7 @@ function initiate(opt) {
           const p = new Promise((resolve, reject) => {
             redisClient.set(sessionId, jwt, (dbErr, reply) => {
               if (!dbErr) {
-                console.log('Session entered into db: ', sessionId, jwt); // eslint-disable-line
+                logger.info('Session entered into db: ', sessionId, jwt);
                 resolve(reply);
               } else {
                 reject(dbErr);
@@ -93,11 +93,11 @@ function initiate(opt) {
 
             ctx.redirect(`/login/${ctx.params.idp}/succeeded`);
           }).catch((err) => {
-            console.log('Something when wrong creating session ', err); // eslint-disable-line
+            logger.error('Something when wrong creating session ', err);
           });
         }
 
-        console.log('Couldn\'t authenticate ', authenticationErr); // eslint-disable-line
+        logger.error('Couldn\'t authenticate ', authenticationErr);
         return ctx.redirect(`/login/${ctx.params.idp}/failed`);
       })(ctx, next);
     }
@@ -112,10 +112,11 @@ function initiate(opt) {
       redisClient.del(sessionId, (err, reply) => {
         if (!err) {
           if (reply === 1) {
-            console.log('Session removed from db: ', sessionId); // eslint-disable-line
+            logger.info('Session removed from db: ', sessionId);
             resolve(reply);
           } else {
-            console.log('Session ', sessionId, ' doesn\'t exist'); // eslint-disable-line
+
+            logger.warn('Session removed from db: ', sessionId);
             reject(err);
           }
         }
