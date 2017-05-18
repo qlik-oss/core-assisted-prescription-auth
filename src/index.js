@@ -10,7 +10,7 @@ const options = commandLineArgs([
   { name: 'sessionCookieName', type: String, defaultValue: process.env.SESSION_COOKIE_NAME }
 ]);
 
-logger.warn("MY SECRETS ", options);
+logger.warn('MY SECRETS ', options);
 
 AuthenticationService.initialize({
   strategy: githubPassportStrategy.strategy({
