@@ -5,4 +5,5 @@ COPY package.json ./
 RUN npm install --production --quiet
 COPY . ./
 EXPOSE "3000"
-ENTRYPOINT ["npm", "start", "--silent"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["npm", "start", "--silent"]
