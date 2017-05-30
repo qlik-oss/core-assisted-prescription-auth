@@ -8,7 +8,7 @@ const redis = require('redis');
 const getJWT = require('./jwt');
 
 function initiate(opt) {
-  const options = opt || {};
+  const options = opt;
   const passportStrategy = options.strategy;
   const scope = options.scope;
 
@@ -18,19 +18,15 @@ function initiate(opt) {
     port: options.redisPort || 6379
   });
 
-  if (!options.port) {
-    options.port = 3000;
-  }
-
   passport.use(passportStrategy);
 
-  passport.serializeUser((user, done) => {
-    done(null, user);
-  });
-
-  passport.deserializeUser((user, done) => {
-    done(null, user);
-  });
+  // passport.serializeUser((user, done) => {
+  //   done(null, user);
+  // });
+  //
+  // passport.deserializeUser((user, done) => {
+  //   done(null, user);
+  // });
 
   function validStrategy(idp) {
     return passportStrategy.name === idp;
@@ -38,8 +34,8 @@ function initiate(opt) {
 
   const app = new Koa();
   app.use(passport.initialize());
-
   app.keys = ['hemligt']; // Needed to sign cookies
+
 
   const router = new Router();
 
@@ -101,11 +97,13 @@ function initiate(opt) {
             ctx.redirect(options.successRedirectUrl);
           }).catch((err) => {
             logger.error('Failed to create session ', err);
+            ctx.status = 500;
+            ctx.body = err;
           });
         }
 
         logger.error('Failed to authenticate ', authenticationErr);
-        return ctx.redirect(`/login/${ctx.params.idp}/failed`);
+        return ctx.redirect(options.failureRedirectUrl);
       })(ctx, next);
     }
 
@@ -123,8 +121,10 @@ function initiate(opt) {
             resolve(reply);
           } else {
             logger.warn('No session found to remove from database: ', sessionId);
-            reject(err);
+            resolve(reply);
           }
+        } else {
+          reject(err);
         }
       });
     });
@@ -134,7 +134,8 @@ function initiate(opt) {
       ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
       ctx.response.body = 'Logged out';
     }).catch((err) => {
-      ctx.throw(500, err);
+      ctx.status = 500;
+      ctx.body = err;
     });
   });
 

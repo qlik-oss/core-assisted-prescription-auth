@@ -2,6 +2,9 @@ const ChaiHttp = require('chai-http');
 
 const MockStrategy = require('./mock-strategy');
 const AuthenticationService = require('../../src/authentication-service');
+const redis = require('redis-mock');
+
+const sinon = require('sinon');
 
 chai.use(ChaiHttp);
 
@@ -19,17 +22,43 @@ const mockStrategy = new MockStrategy({
     } else {
       done(null, false);
     }
-  });
+  }
+);
 
-const autenticationService = AuthenticationService.initialize({ strategy: mockStrategy, port: 3000 });
+const redisClient = redis.createClient();
+
+sinon.stub(require('redis'), 'createClient').returns(redisClient);
+
+const autenticationService = AuthenticationService.initialize({
+  strategy: mockStrategy,
+  port: 3000,
+  successRedirectUrl: '/login/github/succeeded',
+  failureRedirectUrl: '/login/github/failed',
+  sessionCookieName: 'sessionCookieName'
+});
 
 describe('endpoints', () => {
-  afterEach(() => {
+  let sandbox;
+
+  beforeEach(() => {
     loginSuccessfull = true;
+    sandbox = sinon.sandbox.create();
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   describe('github', () => {
-    it('should respond to /login/github and redirec to succeeded', (done) => {
+    it('should redirect login to login/github and then to /login/github/succeeded', (done) => {
+      chai.request(autenticationService).get('/login/')
+        .end((err, res) => {
+          expect(res).to.redirectTo('http://localhost:3000/login/github/succeeded');
+          done();
+        });
+    });
+
+    it('should respond to /login/github and redirect to succeeded', (done) => {
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
           expect(res).to.redirectTo("http://localhost:3000/login/github/succeeded"); // eslint-disable-line
@@ -49,16 +78,23 @@ describe('endpoints', () => {
         });
     });
 
-    it('should respond to /login/github/callback', (done) => {
-      chai.request(autenticationService).get('/login/github/callback')
+    it('should return 500 if session cannot be stored', (done) => {
+      const errorMsg = 'Error in redis';
+
+      sandbox.stub(redisClient, 'set', (sessionId, jwt, callbackFn) => {
+        callbackFn(errorMsg, 0);
+      });
+
+      chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
-          expect(res.status).to.eql(200);
+          expect(res.status).to.eql(500);
+          expect(res.text).to.eql(errorMsg);
           done();
         });
     });
 
-    it('should respond to /login/github/succeeded', (done) => {
-      chai.request(autenticationService).get('/login/github/succeeded')
+    it('should respond to /login/github/callback', (done) => {
+      chai.request(autenticationService).get('/login/github/callback')
         .end((err, res) => {
           expect(res.status).to.eql(200);
           done();
@@ -108,12 +144,46 @@ describe('endpoints', () => {
     });
   });
 
-  it('should respond to /logout', (done) => {
-    chai.request(autenticationService).get('/logout')
-      .end((err, res) => {
-        expect(res.status).to.eql(200);
-        expect(res.text).to.eql('Logged out');
-        done();
+  describe('logout', () => {
+    it('should return 200', (done) => {
+      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
+        callbackFn(undefined, 1);
       });
+
+      chai.request(autenticationService).get('/logout')
+        .end((err, res) => {
+          expect(res.status).to.eql(200);
+          expect(res.text).to.eql('Logged out');
+          done();
+        });
+    });
+
+    it('should return 200 even if session cannot be removed from database', (done) => {
+      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
+        callbackFn(undefined, 0);
+      });
+
+      chai.request(autenticationService).get('/logout')
+        .end((err, res) => {
+          expect(res.status).to.eql(200);
+          expect(res.text).to.eql('Logged out');
+          done();
+        });
+    });
+
+    it('should return 500 if an error is throw from database', (done) => {
+      const errorMsg = 'Error in redis';
+
+      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
+        callbackFn(errorMsg, 0);
+      });
+
+      chai.request(autenticationService).get('/logout')
+        .end((err, res) => {
+          expect(res.status).to.eql(500);
+          expect(res.text).to.eql(errorMsg);
+          done();
+        });
+    });
   });
 });
