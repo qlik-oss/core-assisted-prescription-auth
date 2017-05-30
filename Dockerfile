@@ -1,5 +1,5 @@
 FROM node:7-alpine
-RUN apk add --update bash && rm -rf /var/cache/apk/*
+RUN apk update && apk add bash && rm -rf /var/cache/apk/*
 RUN mkdir -p /app/qlik/authentication-service
 WORKDIR /app/qlik/authentication-service
 COPY package.json ./
