@@ -1,7 +1,6 @@
 const AuthenticationService = require('./authentication-service');
 const githubPassportStrategy = require('./github-passport-strategy');
 const commandLineArgs = require('command-line-args');
-const logger = require('./logger/logger').get();
 
 const options = commandLineArgs([
   { name: 'clientId', type: String, defaultValue: process.env.GITHUB_CLIENT_ID },
