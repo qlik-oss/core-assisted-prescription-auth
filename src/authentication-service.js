@@ -39,7 +39,7 @@ function initiate(opt) {
   const app = new Koa();
   app.use(passport.initialize());
 
-  app.keys = ['hemligt']; // Needed to sign cookies
+  app.keys = [process.env.COOKIE_SIGNING]; // Needed to sign cookies
 
   const router = new Router();
 
