@@ -61,7 +61,7 @@ describe('endpoints', () => {
     it('should respond to /login/github and redirect to succeeded', (done) => {
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
-          expect(res).to.redirectTo("http://localhost:3000/login/github/succeeded"); // eslint-disable-line
+          expect(res).to.redirectTo('http://localhost:3000/login/github/succeeded');
           expect(res.status).to.eql(200);
           done();
         });
@@ -72,7 +72,7 @@ describe('endpoints', () => {
 
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
-          expect(res).to.redirectTo("http://localhost:3000/login/github/failed"); // eslint-disable-line
+          expect(res).to.redirectTo('http://localhost:3000/login/github/failed');
           expect(res.status).to.eql(200);
           done();
         });
@@ -158,7 +158,7 @@ describe('endpoints', () => {
         });
     });
 
-    it('should return 200 even if session cannot be removed from database', (done) => {
+    it('should return 200 even if session cannot be found in the database (ie. logout endpoint triggered multiple times)', (done) => {
       sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
         callbackFn(undefined, 0);
       });

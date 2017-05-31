@@ -98,7 +98,7 @@ function initiate(opt) {
           }).catch((err) => {
             logger.error('Failed to create session ', err);
             ctx.status = 500;
-            ctx.body = err;
+            logger.error(err);
           });
         }
 
@@ -135,7 +135,7 @@ function initiate(opt) {
       ctx.response.body = 'Logged out';
     }).catch((err) => {
       ctx.status = 500;
-      logger.err(err);
+      logger.error(err);
     });
   });
 
