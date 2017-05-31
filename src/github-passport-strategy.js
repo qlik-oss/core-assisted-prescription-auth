@@ -8,7 +8,7 @@ function approvedMember(accessToken, profile, done) {
   httpLibrary.get(url).end((err, res) => {
     if (err || !res.noContent) {
       logger.warn(err);
-      logger.warn(res);      
+      logger.warn(res);
       return done(null, false);
     }
 
