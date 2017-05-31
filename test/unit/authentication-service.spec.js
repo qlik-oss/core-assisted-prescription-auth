@@ -181,7 +181,6 @@ describe('endpoints', () => {
       chai.request(autenticationService).get('/logout')
         .end((err, res) => {
           expect(res.status).to.eql(500);
-          expect(res.text).to.eql(errorMsg);
           done();
         });
     });

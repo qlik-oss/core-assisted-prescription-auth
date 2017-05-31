@@ -7,7 +7,9 @@ const options = commandLineArgs([
   { name: 'clientSecret', type: String, defaultValue: process.env.GITHUB_CLIENT_SECRET },
   { name: 'port', type: Number, defaultValue: 3000 },
   { name: 'sessionCookieName', type: String, defaultValue: process.env.SESSION_COOKIE_NAME },
-  { name: 'successRedirectUrl', type: String, defaultValue: process.env.SUCCESS_REDIRECT_URL }
+  { name: 'successRedirectUrl', type: String, defaultValue: process.env.SUCCESS_REDIRECT_URL },
+  { name: 'failureRedirectUrl', type: String, defaultValue: process.env.FAILURE_REDIRECT_URL }
+
 ]);
 
 AuthenticationService.initialize({
@@ -20,5 +22,6 @@ AuthenticationService.initialize({
   scope: githubPassportStrategy.scope,
   port: options.port,
   sessionCookieName: options.sessionCookieName,
-  successRedirectUrl: options.successRedirectUrl
+  successRedirectUrl: options.successRedirectUrl,
+  failureRedirectUrl: options.failureRedirectUrl
 });

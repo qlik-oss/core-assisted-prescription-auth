@@ -40,7 +40,7 @@ function initiate(opt) {
   const router = new Router();
 
   router.get('/login/', (ctx, next) => {
-    // Will redirec to github by default since we don't have any other IDPs
+    // Will redirect to github by default since we don't have any other IDPs
     ctx.redirect('/login/github');
     next();
   });
@@ -135,7 +135,7 @@ function initiate(opt) {
       ctx.response.body = 'Logged out';
     }).catch((err) => {
       ctx.status = 500;
-      ctx.body = err;
+      logger.err(err);
     });
   });
 
