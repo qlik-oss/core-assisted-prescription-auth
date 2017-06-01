@@ -7,6 +7,7 @@
     "start": "node ./src/index.js",
     "test": "npm run test:unit",
     "test:unit": "aw-test-runner ./test/unit/*.spec.js",
+    "test:unit:coverage": "aw-test-coverage --dir ./coverage/unit -- ./test/unit",
     "lint": "eslint .",
     "lint-fix": "eslint --fix ."
   },
@@ -29,7 +30,9 @@
     "eslint-plugin-import": "2.2.0",
     "let": "0.0.2",
     "nock": "^9.0.13",
-    "passport": "^0.3.2"
+    "passport": "^0.3.2",
+    "redis-mock": "^0.17.0",
+    "sinon": "^2.3.2"
   },
   "dependencies": {
     "command-line-args": "^4.0.4",

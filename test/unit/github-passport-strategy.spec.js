@@ -10,7 +10,6 @@ describe('github-passport-strategy', () => {
   it('should verify inputs - remove if this test causes issues (only for development)', () => {
     expect(strategy._oauth2._clientId).to.eql('clientId'); // eslint-disable-line
     expect(strategy._oauth2._clientSecret).to.eql('clientSecret'); // eslint-disable-line
-    expect(strategy._callbackURL).to.eql('http://localhost:3000/login/github/callback'); // eslint-disable-line
   });
 
   it('should return profile if 204 is returned', (done) => {
@@ -24,7 +23,7 @@ describe('github-passport-strategy', () => {
     });
   });
 
-  it('should undefined profile if 204 is not returned', (done) => {
+  it('should return undefined profile if 204 is not returned', (done) => {
     nock('https://api.github.com')
       .get(`/orgs/qlik-ea/members/GithubUser?access_token=${accessToken}`)
       .reply(401);
