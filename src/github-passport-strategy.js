@@ -6,8 +6,11 @@ function approvedMember(accessToken, profile, done) {
   const url = `https://api.github.com/orgs/qlik-ea/members/${profile.username}?access_token=${accessToken}`;
 
   httpLibrary.get(url).end((err, res) => {
-    if (err || !res.noContent) {
-      logger.warn(err);
+    if (err) {
+      logger.error(err);
+      return done(null, false);
+    }
+    if (!res.noContent) {
       logger.warn(res);
       return done(null, false);
     }

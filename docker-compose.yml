@@ -8,5 +8,7 @@ services:
       SESSION_COOKIE_NAME: custom-analytics
       GITHUB_CLIENT_ID: MyClientID
       GITHUB_CLIENT_SECRET: MySecret
+      JWT_SECRET: jwtsecret
+      COOKIE_SIGNING: cookiesign
     ports:
       - "3000:3000"
