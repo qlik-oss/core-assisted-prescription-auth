@@ -9,7 +9,7 @@ function getJWT(profile) {
     sub: profile.name
   };
 
-  const secret = 'hemligt';
+  const secret = process.env.JWT_SECRET;
 
   return jwt.sign(payload, secret, header);
 }
