@@ -10,7 +10,9 @@ const options = commandLineArgs([
   { name: 'successRedirectUrl', type: String, defaultValue: process.env.SUCCESS_REDIRECT_URL },
   { name: 'failureRedirectUrl', type: String, defaultValue: process.env.FAILURE_REDIRECT_URL },
   { name: 'jwtSecret', type: String, defaultValue: process.env.JWT_SECRET },
-  { name: 'cookieSigning', type: String, defaultValue: process.env.COOKIE_SIGNING }
+  { name: 'cookieSigning', type: String, defaultValue: process.env.COOKIE_SIGNING },
+  { name: 'redisHost', type: String, defaultValue: process.env.REDIS_HOST || 'redis' },
+  { name: 'redisPort', type: String, defaultValue: process.env.REDIS_PORT || 6379 }
 ]);
 
 AuthenticationService.initialize({
@@ -26,5 +28,7 @@ AuthenticationService.initialize({
   successRedirectUrl: options.successRedirectUrl,
   failureRedirectUrl: options.failureRedirectUrl,
   jwtSecret: options.jwtSecret,
-  cookieSigning: options.cookieSigning
+  cookieSigning: options.cookieSigning,
+  redisHost: options.redisHost,
+  redisPort: options.redisPort
 });
