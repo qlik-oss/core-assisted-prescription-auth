@@ -13,9 +13,6 @@ The following environment variables needs to be entered to this service:
 - `SUCCESS_REDIRECT_URL` - where to redirect the user upon successfull sign in.
 - `FAILURE_REDIRECT_URL` - where to redirect the user if authentication fails.
 
-#### /login
-Will redirect to `/login/github` for authentication. _GitHub_ is currently the default identity provider.
-
 #### /login/:idp/
 If the specified identity provider is registered in the service it will initiate an authentication attempt with that provider.
 When the user is authenticated with the identity provider it will redirect to `/login/:idp/callback` where a signed session cookie 

@@ -50,14 +50,6 @@ describe('endpoints', () => {
   });
 
   describe('github', () => {
-    it('should redirect login to login/github and then to /login/github/succeeded', (done) => {
-      chai.request(autenticationService).get('/login/')
-        .end((err, res) => {
-          expect(res).to.redirectTo('http://localhost:3000/login/github/succeeded');
-          done();
-        });
-    });
-
     it('should respond to /login/github and redirect to succeeded', (done) => {
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
