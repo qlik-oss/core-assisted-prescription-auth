@@ -34,7 +34,9 @@ const autenticationService = AuthenticationService.initialize({
   port: 3000,
   successRedirectUrl: '/login/github/succeeded',
   failureRedirectUrl: '/login/github/failed',
-  sessionCookieName: 'sessionCookieName'
+  sessionCookieName: 'sessionCookieName',
+  jwtSecret: 'hemligt',
+  cookieSigning: 'hemligt'
 });
 
 describe('endpoints', () => {
@@ -88,7 +90,6 @@ describe('endpoints', () => {
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
           expect(res.status).to.eql(500);
-          expect(res.text).to.eql(errorMsg);
           done();
         });
     });
