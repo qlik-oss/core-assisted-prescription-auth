@@ -4,14 +4,12 @@ const header = {
   algorithm: 'HS256'
 };
 
-function getJWT(profile) {
+function getJWT(profile, jwtSecret) {
   const payload = {
     sub: profile.name
   };
 
-  const secret = process.env.JWT_SECRET;
-
-  return jwt.sign(payload, secret, header);
+  return jwt.sign(payload, jwtSecret, header);
 }
 
 module.exports = getJWT;

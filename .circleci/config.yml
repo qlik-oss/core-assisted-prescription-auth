@@ -1,5 +1,5 @@
 version: 2
-jobs: 
+jobs:
   build:
     docker:
       - image: node:7
@@ -19,12 +19,16 @@ jobs:
             fi
       - run:
           name: Install dependencies
-          command: 
+          command:
             npm install --quiet
       - run:
           name: Run ESLint
           command:
             npm run lint
+      - run:
+          name: Run Test
+          command:
+            npm run test
       - setup_remote_docker
       - run:
           name: Install Docker client

@@ -35,7 +35,7 @@ function initiate(opt) {
   const app = new Koa();
   app.use(passport.initialize());
 
-  app.keys = [process.env.COOKIE_SIGNING]; // Needed to sign cookies
+  app.keys = [options.cookieSigning]; // Needed to sign cookies
 
   const router = new Router();
 
@@ -70,9 +70,10 @@ function initiate(opt) {
     if (validStrategy(ctx.params.idp)) {
       return passport.authenticate(ctx.params.idp, (authenticationErr, profile) => {
         if (profile) {
-          logger.info('Authenticated and this is the jwt: ', getJWT(profile));
+          const jwt = getJWT(profile, options.jwtSecret);
 
-          const jwt = getJWT(profile);
+          logger.info('Authenticated and this is the jwt: ', jwt);
+
           const sessionId = Math.floor(Math.random() * Date.now()); // TODO: MAKE IT GOOD!
 
           const p = new Promise((resolve, reject) => {
