@@ -3,7 +3,8 @@ The responsibilities of the authentication service is to coordinate authenticati
 
 The authenticate strategy we are using is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
 
-A prerequisite is to have a _Redis_ database available at the host `redis` running on port `6379`.
+A prerequisite is to have a _Redis_ database available at the host specefied in `REDIS_HOST` running on port `REDIS_PORT`. 
+This database needs to be the same that is used in the gateway to map a session cookie to a JWT.
 
 The following environment variables needs to be entered to this service:
 - `GITHUB_CLIENT_ID` - the client secret from the _GitHub_ OAuth application.
@@ -18,11 +19,11 @@ The following environment variables needs to be entered to this service:
 #### /login/:idp/
 If the specified identity provider is registered in the service it will initiate an authentication attempt with that provider.
 When the user is authenticated with the identity provider it will redirect to `/login/:idp/callback` where a signed session cookie 
-(name of the cookie is specified in `SESSION_COOKIE_NAME` signature secret `COOKIE_SIGNING`) and a JWT will be issused.
+(name of the cookie is specified in `SESSION_COOKIE_NAME` and the secret used for signing is defined in `COOKIE_SIGNING`) and a JWT will be issused.
 The `sessionId` and the `JWT` will be stored in a Redis database. Finally the user will be redirected to the specified `SUCCESS_REDIRECT_URL`
 
 If the IDP responds with an authentication failure a redirect to the specified `FAILURE_REDIRECT_URL` will be issues.
-If an error is throw while trying to write `sessionId` or `JWT` to the database the response to the user will be status code 500.
+If an error is thrown while trying to write `sessionId` or `JWT` to the database the response to the user will be status code 500.
 
 #### /logout
 Logout will remove the `sessionId` and the `JWT` from the _Redis_ database and reset the session cookie.
