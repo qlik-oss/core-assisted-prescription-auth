@@ -1,4 +1,4 @@
-#Authentication service
+# Authentication service
 The responsibilities of the authentication service is to coordinate authentication sessions with configured identity providers and to issue JWTs for internal usage. 
 
 The authenticate strategy we are using is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
