@@ -1,7 +1,7 @@
 #Authentication service
 The responsibilities of the authentication service is to coordinate authentication sessions with configured identity providers and to issue JWTs for internal usage. 
 
-The default authenticate strategy is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
+The authenticate strategy we are using is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
 
 A prerequisite is to have a _Redis_ database available at the host `redis` running on port `6379`.
 
@@ -11,7 +11,9 @@ The following environment variables needs to be entered to this service:
 - `SESSION_COOKIE_NAME` - name of the session cookie.
 - `COOKIE_SIGNING` - secret that is used to sign the session cookie.
 - `SUCCESS_REDIRECT_URL` - where to redirect the user upon successfull sign in.
-- `FAILURE_REDIRECT_URL` - where to redirect the user if authentication fails.
+- `FAILURE_REDIRECT_URL` - where to redirect the user if authentication fails.-
+- `REDIS_HOST` - the host adress to the Redis database.
+- `REDIS_PORT` - the port on which the Redis database is listening
 
 #### /login/:idp/
 If the specified identity provider is registered in the service it will initiate an authentication attempt with that provider.
