@@ -84,7 +84,7 @@ function initiate(opt) {
                 reject(dbErr);
               }
 
-              redisClient.close();
+              redisClient.quit();
             });
           });
 
@@ -131,7 +131,7 @@ function initiate(opt) {
           reject(err);
         }
 
-        redisClient.close();
+        redisClient.quit();
       });
     });
 
