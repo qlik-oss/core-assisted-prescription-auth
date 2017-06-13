@@ -74,13 +74,17 @@ function initiate(opt) {
           const sessionId = Math.floor(Math.random() * Date.now()); // TODO: MAKE IT GOOD!
 
           const p = new Promise((resolve, reject) => {
-            getRedisClient().set(sessionId, jwt, (dbErr, reply) => {
+            const redisClient = getRedisClient();
+
+            redisClient.set(sessionId, jwt, (dbErr, reply) => {
               if (!dbErr) {
                 logger.info('Session stored in database: ', sessionId, jwt);
                 resolve(reply);
               } else {
                 reject(dbErr);
               }
+
+              redisClient.close();
             });
           });
 
@@ -112,7 +116,9 @@ function initiate(opt) {
     const sessionId = ctx.cookies.get(options.sessionCookieName);
 
     const p = new Promise((resolve, reject) => {
-      getRedisClient().del(sessionId, (err, reply) => {
+      const redisClient = getRedisClient();
+
+      redisClient.del(sessionId, (err, reply) => {
         if (!err) {
           if (reply === 1) {
             logger.info('Session removed from database: ', sessionId);
@@ -124,6 +130,8 @@ function initiate(opt) {
         } else {
           reject(err);
         }
+
+        redisClient.close();
       });
     });
 
