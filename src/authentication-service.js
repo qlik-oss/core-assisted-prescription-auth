@@ -13,10 +13,6 @@ function initiate(opt) {
   const scope = options.scope;
 
   // TODO: Populate setting + credentials???
-  const redisClient = redis.createClient({
-    host: options.redisHost || 'redis',
-    port: options.redisPort || 6379
-  });
 
   passport.use(passportStrategy);
 
@@ -30,6 +26,13 @@ function initiate(opt) {
 
   function validStrategy(idp) {
     return passportStrategy.name === idp;
+  }
+
+  function getRedisClient() {
+    return redis.createClient({
+      host: options.redisHost || 'redis',
+      port: options.redisPort || 6379
+    });
   }
 
   const app = new Koa();
@@ -71,7 +74,7 @@ function initiate(opt) {
           const sessionId = Math.floor(Math.random() * Date.now()); // TODO: MAKE IT GOOD!
 
           const p = new Promise((resolve, reject) => {
-            redisClient.set(sessionId, jwt, (dbErr, reply) => {
+            getRedisClient().set(sessionId, jwt, (dbErr, reply) => {
               if (!dbErr) {
                 logger.info('Session stored in database: ', sessionId, jwt);
                 resolve(reply);
@@ -109,7 +112,7 @@ function initiate(opt) {
     const sessionId = ctx.cookies.get(options.sessionCookieName);
 
     const p = new Promise((resolve, reject) => {
-      redisClient.del(sessionId, (err, reply) => {
+      getRedisClient().del(sessionId, (err, reply) => {
         if (!err) {
           if (reply === 1) {
             logger.info('Session removed from database: ', sessionId);
