@@ -35,12 +35,14 @@
     "sinon": "^2.3.2"
   },
   "dependencies": {
-    "command-line-args": "^4.0.4",
-    "jsonwebtoken": "^7.4.0",
+    "command-line-args": "^4.0.6",
+    "jsonwebtoken": "^7.4.1",
     "koa": "2.2.0",
+    "koa-bodyparser": "^4.2.0",
     "koa-passport": "^3.0.0",
-    "koa-router": "7.1.1",
+    "koa-router": "7.2.0",
     "passport-github2": "^0.1.10",
+    "passport-local": "^1.0.0",
     "redis": "^2.7.1",
     "superagent": "^3.5.2",
     "winston": "^2.3.1"
