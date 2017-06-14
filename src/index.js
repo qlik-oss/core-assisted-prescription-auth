@@ -64,3 +64,4 @@ AuthenticationService.initialize({
   redisHost: options.redisHost,
   redisPort: options.redisPort
 });
+
