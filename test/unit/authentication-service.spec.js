@@ -16,13 +16,13 @@ const mockStrategy = new MockStrategy({
   clientSecret: 'clientSecret',
   callbackURL: 'http://localhost:3000/login/github/callback'
 },
-  (accessToken, refreshToken, profile, done) => {
-    if (loginSuccessfull) {
-      done(null, profile);
-    } else {
-      done(null, false);
-    }
+(accessToken, refreshToken, profile, done) => {
+  if (loginSuccessfull) {
+    done(null, profile);
+  } else {
+    done(null, false);
   }
+}
 );
 
 const redisClient = redis.createClient();
