@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const passport = require('koa-passport');
+const uuidV4 = require('uuid/v4');
 
 const logger = require('./logger/logger').get();
 const redis = require('redis');
@@ -36,13 +37,13 @@ function initiate(opt) {
     });
   }
 
-  function createSessionInRedisAndSetCookie(authenticationErr, profile, ctx) {
+  async function createSessionInRedisAndSetCookie(authenticationErr, profile, ctx) {
     if (profile) {
       const jwt = getJWT(profile, options.jwtSecret);
 
       logger.info('Authenticated and this is the jwt: ', jwt);
 
-      const sessionId = Math.floor(Math.random() * Date.now()); // TODO: MAKE IT GOOD!
+      const sessionId = uuidV4();
 
       const p = new Promise((resolve, reject) => {
         const redisClient = getRedisClient();
@@ -58,24 +59,24 @@ function initiate(opt) {
         });
       });
 
-
-      return p.then(() => {
+      try {
+        await p;
         ctx.cookies.set(options.sessionCookieName, sessionId, {
           signed: true,
           httpOnly: true
           // secure: true //Should be turned on when we have https going
         });
-
         ctx.redirect(options.successRedirectUrl);
-      }).catch((err) => {
+      } catch (err) {
         logger.error('Failed to create session ', err);
         ctx.status = 500;
         logger.error(err);
-      });
+        ctx.redirect(options.failureRedirectUrl);
+      }
+    } else {
+      logger.error('Failed to authenticate ', authenticationErr);
+      ctx.redirect(options.failureRedirectUrl);
     }
-
-    logger.error('Failed to authenticate ', authenticationErr);
-    return ctx.redirect(options.failureRedirectUrl);
   }
 
   const app = new Koa();
@@ -98,34 +99,29 @@ function initiate(opt) {
     }
   });
 
-  router.get('/login/:idp', (ctx, next) => {
-    if (validStrategy(ctx.params.idp)) {
-      if (ctx.params.idp === 'local') {
-        ctx.response.body = '<form action="/login/local" method="post"><div><label>Username:</label><input type="text" name="username" /> <br /></div ><div> <label>Password:</label><input type="password" name="password" /></div><div><input type="submit" value="Submit" /></div></form >';
-      } else {
-        return passport.authenticate(ctx.params.idp, { scope })(ctx, next);
-      }
+  router.get('/login/local', (ctx) => {
+    if (validStrategy('local')) {
+      ctx.params.idp = 'local'; // setting the idp for use in the callback
+      ctx.response.body = '<form action="/login/local/callback" method="get"><div><label>Username:</label><input type="text" name="username" /> <br /></div ><div> <label>Password:</label><input type="password" name="password" /></div><div><input type="submit" value="Submit" /></div></form >';
     }
-    return next();
   });
 
-  router.post('/login/:idp', (ctx, next) => {
-    if (validStrategy(ctx.params.idp) && ctx.params.idp === 'local') {
-      return passport.authenticate(ctx.params.idp, (err, user) => createSessionInRedisAndSetCookie(err, user, ctx))(ctx, next);
+  router.get('/login/:idp', (ctx, next) => {
+    if (validStrategy(ctx.params.idp)) {
+      return passport.authenticate(ctx.params.idp, { scope })(ctx, next);
     }
     return next();
   });
 
   router.get('/login/:idp/callback', (ctx, next) => {
     // TODO: If user is already logged in return same session cookie and do not create a new one
-
-    if (validStrategy(ctx.params.idp) && ctx.params.idp !== 'local') {
+    if (validStrategy(ctx.params.idp)) {
       return passport.authenticate(ctx.params.idp, (err, user) => createSessionInRedisAndSetCookie(err, user, ctx))(ctx, next);
     }
     return next();
   });
 
-  router.get('/logout', (ctx) => {
+  router.get('/logout', async (ctx) => {
     const sessionId = ctx.cookies.get(options.sessionCookieName);
 
     const p = new Promise((resolve, reject) => {
@@ -148,14 +144,15 @@ function initiate(opt) {
       });
     });
 
-    return p.then(() => {
+    try {
+      await p;
       ctx.cookies.set(options.sessionCookieName, null);
       ctx.cookies.set(`${options.sessionCookieName}.sig`, null);
       ctx.response.body = 'Logged out';
-    }).catch((err) => {
+    } catch (err) {
       ctx.status = 500;
       logger.error(err);
-    });
+    }
   });
 
   app
