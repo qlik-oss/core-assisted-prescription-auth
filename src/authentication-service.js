@@ -71,7 +71,6 @@ function initiate(opt) {
         logger.error('Failed to create session ', err);
         ctx.status = 500;
         logger.error(err);
-        ctx.redirect(options.failureRedirectUrl);
       }
     } else {
       logger.error('Failed to authenticate ', authenticationErr);
