@@ -98,6 +98,10 @@ function initiate(opt) {
     }
   });
 
+  router.get('/idp', (ctx) => {
+    ctx.response.body = passportStrategy.name;
+  });
+
   router.get('/login/local', (ctx) => {
     if (validStrategy('local')) {
       ctx.params.idp = 'local'; // setting the idp for use in the callback
