@@ -104,7 +104,6 @@ function initiate(opt) {
 
   router.get('/login/local', (ctx) => {
     if (validStrategy('local')) {
-      ctx.params.idp = 'local'; // setting the idp for use in the callback
       ctx.response.body = '<form action="/login/local/callback" method="get"><div><label>Username:</label><input type="text" name="username" /> <br /></div ><div> <label>Password:</label><input type="password" name="password" /></div><div><input type="submit" value="Submit" /></div></form >';
     }
   });
