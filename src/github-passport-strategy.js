@@ -2,21 +2,28 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const httpLibrary = require('superagent');
 const logger = require('./logger/logger').get();
 
-function approvedMember(accessToken, profile, done) {
-  const url = `https://api.github.com/orgs/qlik-ea/members/${profile.username}?access_token=${accessToken}`;
+async function approvedMember(accessToken, profile, done) {
+  const urls = [];
+  const requests = [];
+  urls.push(`https://api.github.com/orgs/qlik-ea/members/${profile.username}?access_token=${accessToken}`);
+  urls.push(`https://api.github.com/orgs/qlik-trial/members/${profile.username}?access_token=${accessToken}`);
 
-  httpLibrary.get(url).end((err, res) => {
-    if (err) {
-      logger.error(err);
-      return done(null, false);
-    }
-    if (!res.noContent) {
-      logger.warn(res);
-      return done(null, false);
-    }
-
-    return done(null, profile);
+  urls.forEach((url) => {
+    requests.push(httpLibrary.get(url).catch(result => Promise.resolve(result)));
   });
+
+  let isMember = false;
+  const results = await Promise.all(requests);
+  results.forEach((result) => {
+    if (result.noContent) {
+      isMember = true;
+    }
+  });
+  if (isMember) {
+    return done(null, profile);
+  }
+  logger.warn(`user ${profile.username} failed to login`);
+  return done(null, false);
 }
 
 function githubPassportStrategy(options) {
