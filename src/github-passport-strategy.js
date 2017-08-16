@@ -3,22 +3,14 @@ const httpLibrary = require('superagent');
 const logger = require('./logger/logger').get();
 
 async function approvedMember(accessToken, profile, done) {
-  const urls = [];
-  const requests = [];
-  urls.push(`https://api.github.com/orgs/qlik-ea/members/${profile.username}?access_token=${accessToken}`);
-  urls.push(`https://api.github.com/orgs/qlik-trial/members/${profile.username}?access_token=${accessToken}`);
+  const githubTemplate = org => `https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`;
+  const requests = [
+    githubTemplate('qlik-ea'),
+    githubTemplate('qlik-trial')
+  ].map(url => httpLibrary.get(url).catch(result => Promise.resolve(result)));
 
-  urls.forEach((url) => {
-    requests.push(httpLibrary.get(url).catch(result => Promise.resolve(result)));
-  });
-
-  let isMember = false;
   const results = await Promise.all(requests);
-  results.forEach((result) => {
-    if (result.noContent) {
-      isMember = true;
-    }
-  });
+  const isMember = results.some(r => r.noContent);
   if (isMember) {
     return done(null, profile);
   }
