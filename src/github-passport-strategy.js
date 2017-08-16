@@ -10,7 +10,7 @@ async function approvedMember(accessToken, profile, done) {
   ].map(url => httpLibrary.get(url).catch(result => Promise.resolve(result)));
 
   const results = await Promise.all(requests);
-  const isMember = results.some(r => r.noContent);
+  const isMember = results.some(result => result.noContent);
   if (isMember) {
     return done(null, profile);
   }
