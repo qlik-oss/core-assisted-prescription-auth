@@ -45,7 +45,7 @@ switch (options.strategy) {
       } else if (accounts[username] !== password) {
         return done(null, false);
       }
-      return done(null, { name: username });
+      return done(null, { username });
     });
     break;
   default:
