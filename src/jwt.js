@@ -6,7 +6,7 @@ const header = {
 
 function getJWT(profile, jwtSecret) {
   const payload = {
-    sub: profile.name
+    sub: profile.username
   };
 
   return jwt.sign(payload, jwtSecret, header);
