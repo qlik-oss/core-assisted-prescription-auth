@@ -66,7 +66,8 @@ function initiate(opt) {
           httpOnly: true
           // secure: true //Should be turned on when we have https going
         });
-        ctx.redirect(options.successRedirectUrl);
+        const successRedirectUrl = ctx.cookies.get('qliktive_redirect_url') || options.successRedirectUrl;
+        ctx.redirect(successRedirectUrl);
       } catch (err) {
         logger.error('Failed to create session ', err);
         ctx.status = 500;
