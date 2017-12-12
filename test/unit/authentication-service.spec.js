@@ -32,7 +32,6 @@ sinon.stub(require('redis'), 'createClient').returns(redisClient);
 const autenticationService = AuthenticationService.initialize({
   strategy: mockStrategy,
   port: 3000,
-  successRedirectUrl: '/login/github/succeeded',
   failureRedirectUrl: '/login/github/failed',
   sessionCookieName: 'sessionCookieName',
   jwtSecret: 'hemligt',
@@ -53,12 +52,12 @@ describe('endpoints', () => {
 
   describe('github', () => {
     it('should respond to /login/github and redirect to succeeded', (done) => {
-      chai.request(autenticationService).get('/login/github')
-        .end((err, res) => {
-          expect(res).to.redirectTo('http://localhost:3000/login/github/succeeded');
-          expect(res.status).to.eql(200);
-          done();
-        });
+      const agent = chai.request.agent(autenticationService);
+      agent.get('/login/github?redirect_url=/login/github/succeeded').end((err, res) => {
+        expect(res).to.redirectTo('http://localhost:3000/login/github/succeeded');
+        expect(res.status).to.eql(200);
+        done();
+      });
     });
 
     it('should respond to /login/github and redirect to failed if login is unsuccessfull', (done) => {
@@ -87,7 +86,8 @@ describe('endpoints', () => {
     });
 
     it('should respond to /login/github/callback', (done) => {
-      chai.request(autenticationService).get('/login/github/callback')
+      const agent = chai.request.agent(autenticationService);
+      agent.get('/login/github/callback?redirect_url=/login/github/succeeded')
         .end((err, res) => {
           expect(res.status).to.eql(200);
           done();
