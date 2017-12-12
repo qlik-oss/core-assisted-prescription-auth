@@ -27,7 +27,7 @@ function initiate(opt) {
   // });
 
   function setTempRedirectCookie(ctx) {
-    const successRedirectUrl = ctx.request.query.qliktive_redirect_url;
+    const successRedirectUrl = ctx.request.query.redirect_url;
     if (successRedirectUrl) {
       ctx.cookies.set(`${options.sessionCookieName}_redirect_url`, successRedirectUrl);
     }
