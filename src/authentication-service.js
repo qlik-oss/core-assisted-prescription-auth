@@ -26,6 +26,13 @@ function initiate(opt) {
   //   done(null, user);
   // });
 
+  function setTempRedirectCookie(ctx) {
+    const successRedirectUrl = ctx.request.query.qliktive_redirect_url;
+    if (successRedirectUrl) {
+      ctx.cookies.set(`${options.sessionCookieName}_redirect_url`, successRedirectUrl);
+    }
+  }
+
   function validStrategy(idp) {
     return passportStrategy.name === idp;
   }
@@ -66,9 +73,11 @@ function initiate(opt) {
           httpOnly: true
           // secure: true //Should be turned on when we have https going
         });
-        const successRedirectUrl = ctx.cookies.get('qliktive_redirect_url') || options.successRedirectUrl;
+        const successRedirectUrl = ctx.cookies.get(`${options.sessionCookieName}_redirect_url`) || '/';
+        ctx.cookies.set(`${options.sessionCookieName}_redirect_url`);
         ctx.redirect(successRedirectUrl);
       } catch (err) {
+        ctx.cookies.set(`${options.sessionCookieName}_redirect_url`);
         logger.error('Failed to create session ', err);
         ctx.status = 500;
         logger.error(err);
@@ -105,12 +114,14 @@ function initiate(opt) {
 
   router.get('/login/local', (ctx) => {
     if (validStrategy('local')) {
+      setTempRedirectCookie(ctx);
       ctx.response.body = '<form action="/login/local/callback" method="get"><div><label>Username:</label><input type="text" name="username" /> <br /></div ><div> <label>Password:</label><input type="password" name="password" /></div><div><input type="submit" value="Submit" /></div></form >';
     }
   });
 
   router.get('/login/:idp', (ctx, next) => {
     if (validStrategy(ctx.params.idp)) {
+      setTempRedirectCookie(ctx);
       return passport.authenticate(ctx.params.idp, { scope })(ctx, next);
     }
     return next();
@@ -119,6 +130,8 @@ function initiate(opt) {
   router.get('/login/:idp/callback', (ctx, next) => {
     // TODO: If user is already logged in return same session cookie and do not create a new one
     if (validStrategy(ctx.params.idp)) {
+      // handle the case when we call the callback directly (as we do from the UI in custom analytics)
+      setTempRedirectCookie(ctx);
       return passport.authenticate(ctx.params.idp, (err, user) => createSessionInRedisAndSetCookie(err, user, ctx))(ctx, next);
     }
     return next();
