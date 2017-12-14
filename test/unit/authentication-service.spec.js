@@ -14,7 +14,7 @@ const mockStrategy = new MockStrategy({
   name: 'github',
   clientID: 'clientID',
   clientSecret: 'clientSecret',
-  callbackURL: 'http://localhost:3000/login/github/callback'
+  callbackURL: 'http://localhost:3000/login/github/callback',
 },
 (accessToken, refreshToken, profile, done) => {
   if (loginSuccessfull) {
@@ -22,7 +22,7 @@ const mockStrategy = new MockStrategy({
   } else {
     done(null, false);
   }
-}
+},
 );
 
 const redisClient = redis.createClient();
@@ -35,7 +35,7 @@ const autenticationService = AuthenticationService.initialize({
   failureRedirectUrl: '/login/github/failed',
   sessionCookieName: 'sessionCookieName',
   jwtSecret: 'hemligt',
-  cookieSigning: 'hemligt'
+  cookieSigning: 'hemligt',
 });
 
 describe('endpoints', () => {

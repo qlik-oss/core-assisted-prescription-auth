@@ -40,7 +40,7 @@ function initiate(opt) {
   function getRedisClient() {
     return redis.createClient({
       host: options.redisHost || 'redis',
-      port: options.redisPort || 6379
+      port: options.redisPort || 6379,
     });
   }
 
@@ -70,7 +70,7 @@ function initiate(opt) {
         await p;
         ctx.cookies.set(options.sessionCookieName, sessionId, {
           signed: true,
-          httpOnly: true
+          httpOnly: true,
           // secure: true //Should be turned on when we have https going
         });
         const successRedirectUrl = ctx.cookies.get(`${options.sessionCookieName}_redirect_url`) || '/';

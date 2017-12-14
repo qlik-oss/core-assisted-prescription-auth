@@ -15,7 +15,7 @@ const options = commandLineArgs([
   { name: 'cookieSigning', type: String, defaultValue: process.env.COOKIE_SIGNING },
   { name: 'redisHost', type: String, defaultValue: process.env.REDIS_HOST || 'redis' },
   { name: 'redisPort', type: String, defaultValue: process.env.REDIS_PORT || 6379 },
-  { name: 'localAccountsFile', type: String, defaultValue: process.env.ACCOUNTS_FILE }
+  { name: 'localAccountsFile', type: String, defaultValue: process.env.ACCOUNTS_FILE },
 ]);
 
 let strategy;
@@ -34,7 +34,7 @@ switch (options.strategy) {
     strategy = githubPassportStrategy.strategy({
       port: options.port,
       clientId: options.clientId,
-      clientSecret: options.clientSecret
+      clientSecret: options.clientSecret,
     });
     break;
   case 'local':
@@ -60,6 +60,6 @@ AuthenticationService.initialize({
   jwtSecret: options.jwtSecret,
   cookieSigning: options.cookieSigning,
   redisHost: options.redisHost,
-  redisPort: options.redisPort
+  redisPort: options.redisPort,
 });
 

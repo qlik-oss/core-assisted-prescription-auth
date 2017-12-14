@@ -6,7 +6,7 @@ async function approvedMember(accessToken, profile, done) {
   const githubTemplate = org => `https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`;
   const requests = [
     githubTemplate('qlik-ea'),
-    githubTemplate('qlik-trial')
+    githubTemplate('qlik-trial'),
   ].map(url => httpLibrary.get(url).catch(result => Promise.resolve(result)));
 
   const results = await Promise.all(requests);
@@ -22,7 +22,7 @@ function githubPassportStrategy(options) {
   return new GitHubStrategy(
     {
       clientID: options.clientId,
-      clientSecret: options.clientSecret
+      clientSecret: options.clientSecret,
     },
     (accessToken, refreshToken, profile, done) => approvedMember(accessToken, profile, done));
 }
@@ -33,5 +33,5 @@ function getScope() {
 
 module.exports = {
   strategy: githubPassportStrategy,
-  scope: getScope()
+  scope: getScope(),
 };
