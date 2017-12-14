@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: cache-{{ checksum "package.json" }}
+          key: dep-cache-{{ checksum "package.json" }}
       - run:
           name: Install dependencies
           command:
@@ -23,7 +23,7 @@ jobs:
           command:
             npm run test
       - save_cache:
-          key: cache-{{ checksum "package.json" }}
+          key: dep-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
       - setup_remote_docker
