@@ -96,6 +96,10 @@ function initiate(opt) {
 
   const router = new Router();
 
+  router.get('/health', async (ctx) => {
+    ctx.body = 'OK';
+  });
+
   router.get('/login/:idp/succeeded', (ctx) => {
     if (validStrategy(ctx.params.idp)) {
       ctx.response.body = 'succeeded';
