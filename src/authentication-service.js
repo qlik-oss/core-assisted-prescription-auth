@@ -126,7 +126,9 @@ function initiate(opt) {
   router.get('/login/:idp', (ctx, next) => {
     if (validStrategy(ctx.params.idp)) {
       setTempRedirectCookie(ctx);
-      return passport.authenticate(ctx.params.idp, { scope })(ctx, next);
+      return passport.authenticate(ctx.params.idp, {
+        scope,
+      })(ctx, next);
     }
     return next();
   });
@@ -134,9 +136,13 @@ function initiate(opt) {
   router.get('/login/:idp/callback', (ctx, next) => {
     // TODO: If user is already logged in return same session cookie and do not create a new one
     if (validStrategy(ctx.params.idp)) {
-      // handle the case when we call the callback directly (as we do from the UI in custom analytics)
+      // handle the case when we call the callback directly,
+      // as we do from the UI in custom analytics
       setTempRedirectCookie(ctx);
-      return passport.authenticate(ctx.params.idp, (err, user) => createSessionInRedisAndSetCookie(err, user, ctx))(ctx, next);
+      return passport.authenticate(
+        ctx.params.idp,
+        (err, user) => createSessionInRedisAndSetCookie(err, user, ctx),
+      )(ctx, next);
     }
     return next();
   });
@@ -182,4 +188,6 @@ function initiate(opt) {
   return app.listen(options.port);
 }
 
-module.exports = { initialize: initiate };
+module.exports = {
+  initialize: initiate,
+};
