@@ -12,7 +12,7 @@ The responsibilities of the authentication service is to coordinate authenticati
 
 The authenticate strategy we are using is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
 
-A prerequisite is to have a _Redis_ database available at the host specfied in `REDIS_HOST` running on port `REDIS_PORT`.
+A prerequisite is to have a _Redis_ database available at the host specified in `REDIS_HOST` running on port `REDIS_PORT`.
 This database needs to be the same that is used in the gateway to map a session cookie to a JWT.
 
 The following environment variables needs to be entered to this service:
