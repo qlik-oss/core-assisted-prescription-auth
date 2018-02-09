@@ -2,20 +2,37 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const httpLibrary = require('superagent');
 const logger = require('./logger/logger').get();
 
-async function approvedMember(accessToken, profile, done) {
-  const githubTemplate = org => `https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`;
-  const requests = [
-    githubTemplate('qlik-ea'),
-    githubTemplate('qlik-trial'),
-  ].map(url => httpLibrary.get(url).catch(result => Promise.resolve(result)));
+async function approvedMember(options, accessToken, profile, done) {
+  profile.authMethod = 'github';  
+  //If no organisation is defined as admin, all will be granted admin rights
+  if(!options.githubOrgIsAdmin) {
+    setAdminRole(profile);  
+    return done(null, profile);    
+  }
 
-  const results = await Promise.all(requests);
+  var adminOrganisations = options.githubOrgIsAdmin.split(";");
+  const req = adminOrganisations.map(org => {
+    return httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result));
+  });
+
+  const results = await Promise.all(req);
+  
   const isMember = results.some(result => result.noContent);
   if (isMember) {
-    return done(null, profile);
+    setAdminRole(profile);
   }
-  logger.warn(`user ${profile.username} failed to login`);
-  return done(null, false);
+  else {
+    setUserRole(profile);
+  }
+  return done(null, profile);
+}
+
+function setAdminRole(profile) {
+  profile.userRole = 'Admin';
+}
+
+function setUserRole(profile) {
+  profile.userRole = 'User';
 }
 
 function githubPassportStrategy(options) {
@@ -24,7 +41,7 @@ function githubPassportStrategy(options) {
       clientID: options.clientId,
       clientSecret: options.clientSecret,
     },
-    (accessToken, refreshToken, profile, done) => approvedMember(accessToken, profile, done));
+    (accessToken, refreshToken, profile, done) => approvedMember(options, accessToken, profile, done));
 }
 
 function getScope() {
