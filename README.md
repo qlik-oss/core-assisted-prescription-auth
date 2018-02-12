@@ -41,7 +41,7 @@ When the user is authenticated with the identity provider it will redirect to `/
 (name of the cookie is specified in `SESSION_COOKIE_NAME` and the secret used for signing is defined in `COOKIE_SIGNING`) and a JWT will be issued.
 The `sessionId` and the `JWT` will be stored in a Redis database. Finally, the user will be redirected to the specified `SUCCESS_REDIRECT_URL`
 
-If the IDP responds with an authentication failure a redirect to the specified `FAILURE_REDIRECT_URL` will be be issued.
+If the IDP responds with an authentication failure a redirect to the specified `FAILURE_REDIRECT_URL` will be issued.
 If an error is thrown while trying to write `sessionId` or `JWT` to the database the response to the user will be status code 500.
 
 ### /logout
