@@ -27,7 +27,7 @@ describe('github-passport-strategy', () => {
     });
   });
 
-  it('should return non admin profile if 204 is not returned', (done) => {
+  it('should return user profile if 401 is returned', (done) => {
     nock('https://api.github.com')
       .get(`/orgs/qlik-ea/members/GithubUser?access_token=${accessToken}`)
       .reply(401);

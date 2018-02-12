@@ -5,25 +5,24 @@ const logger = require('./logger/logger').get();
 async function approvedMember(options, accessToken, profile, done) {
   const userProfile = Object.assign({}, profile);
   userProfile.authMethod = 'github';
-  userProfile.userRole = options.githubOrgIsAdmin ? 'User' : 'Admin';
+  userProfile.userRole = 'User';
 
   // If no organisation is defined as admin, all will be granted admin rights
-  if (userProfile.userRole === 'Admin') {
-    logger.debug('No Github organisation defined, setting admin rights');
-    return done(null, userProfile);
-  }
+  if (options.githubOrgIsAdmin) {
+    const adminOrganisations = options.githubOrgIsAdmin.split(';');
+    const req = adminOrganisations.map(org => httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result)));
+    const results = await Promise.all(req);
+    const isMember = results.some(result => result.noContent);
 
-  const adminOrganisations = options.githubOrgIsAdmin.split(';');
-  const req = adminOrganisations.map(org => httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result)));
-
-  const results = await Promise.all(req);
-
-  const isMember = results.some(result => result.noContent);
-  if (isMember) {
-    userProfile.userRole = 'Admin';
-    logger.debug('Access to defined Github org, setting admin privilege');
+    if (isMember) {
+      userProfile.userRole = 'Admin';
+      logger.debug('Access to defined Github org, setting admin privilege');
+    } else {
+      logger.debug('No access to defined Github org, setting user privilege');
+    }
   } else {
-    logger.debug('No access to defined Github org, setting user privilege');
+    userProfile.userRole = 'Admin';
+    logger.debug('No Github organisation defined, setting admin rights');
   }
   return done(null, userProfile);
 }
