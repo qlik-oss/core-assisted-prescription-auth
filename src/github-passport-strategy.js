@@ -3,36 +3,29 @@ const httpLibrary = require('superagent');
 const logger = require('./logger/logger').get();
 
 async function approvedMember(options, accessToken, profile, done) {
-  profile.authMethod = 'github';  
-  //If no organisation is defined as admin, all will be granted admin rights
-  if(!options.githubOrgIsAdmin) {
-    setAdminRole(profile);  
-    return done(null, profile);    
+  const userProfile = Object.assign({}, profile);
+  userProfile.authMethod = 'github';
+  userProfile.userRole = options.githubOrgIsAdmin ? 'User' : 'Admin';
+
+  // If no organisation is defined as admin, all will be granted admin rights
+  if (userProfile.userRole === 'Admin') {
+    logger.debug('No Github organisation defined, setting admin rights');
+    return done(null, userProfile);
   }
 
-  var adminOrganisations = options.githubOrgIsAdmin.split(";");
-  const req = adminOrganisations.map(org => {
-    return httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result));
-  });
+  const adminOrganisations = options.githubOrgIsAdmin.split(';');
+  const req = adminOrganisations.map(org => httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result)));
 
   const results = await Promise.all(req);
-  
+
   const isMember = results.some(result => result.noContent);
   if (isMember) {
-    setAdminRole(profile);
+    userProfile.userRole = 'Admin';
+    logger.debug('Access to defined Github org, setting admin privilege');
+  } else {
+    logger.debug('No access to defined Github org, setting user privilege');
   }
-  else {
-    setUserRole(profile);
-  }
-  return done(null, profile);
-}
-
-function setAdminRole(profile) {
-  profile.userRole = 'Admin';
-}
-
-function setUserRole(profile) {
-  profile.userRole = 'User';
+  return done(null, userProfile);
 }
 
 function githubPassportStrategy(options) {
@@ -41,7 +34,8 @@ function githubPassportStrategy(options) {
       clientID: options.clientId,
       clientSecret: options.clientSecret,
     },
-    (accessToken, refreshToken, profile, done) => approvedMember(options, accessToken, profile, done));
+    (accessToken, refreshToken, profile, done) =>
+      approvedMember(options, accessToken, profile, done));
 }
 
 function getScope() {
