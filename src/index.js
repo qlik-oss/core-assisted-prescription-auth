@@ -8,6 +8,7 @@ const options = commandLineArgs([
   { name: 'strategy', type: String, defaultValue: process.env.AUTH_STRATEGY || 'local' },
   { name: 'clientId', type: String, defaultValue: process.env.GITHUB_CLIENT_ID },
   { name: 'clientSecret', type: String, defaultValue: process.env.GITHUB_CLIENT_SECRET },
+  { name: 'githubOrgIsAdmin', type: String, defaultValue: process.env.GITHUB_ORG_IS_ADMIN || '' },
   { name: 'port', type: Number, defaultValue: 3000 },
   { name: 'sessionCookieName', type: String, defaultValue: process.env.SESSION_COOKIE_NAME },
   { name: 'failureRedirectUrl', type: String, defaultValue: process.env.FAILURE_REDIRECT_URL },
@@ -35,6 +36,7 @@ switch (options.strategy) {
       port: options.port,
       clientId: options.clientId,
       clientSecret: options.clientSecret,
+      githubOrgIsAdmin: options.githubOrgIsAdmin,
     });
     break;
   case 'local':
@@ -44,7 +46,8 @@ switch (options.strategy) {
       } else if (accounts[username] !== password) {
         return done(null, false);
       }
-      return done(null, { username });
+      // Local user will get User rights, change to Admin for admin rights
+      return done(null, { username, userRole: 'User' });
     });
     break;
   default:

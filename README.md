@@ -8,36 +8,40 @@
 
 ## Overview
 
-The responsibilities of the authentication service is to coordinate authentication sessions with configured identity providers and to issue JWTs for internal usage.
+The responsibilities of the authentication service are to coordinate authentication sessions with configured identity providers and to issue JWTs for internal usage.
 
-The authenticate strategy we are using is that a users has to have a _GitHub_ account and are a member of the _Qlik-EA_ organisation.
+The authentication service currently supports two authentication methods, `local` and `github`. 
+
+If you choose to use `github` as authentication method you can specify one or more Github organization separated with `;` in the environment variables `GITHUB_ORG_IS_ADMIN`. This will give the users who are a member admin priveledges. If no organization is specified all users will gain admin rights. 
 
 A prerequisite is to have a _Redis_ database available at the host specified in `REDIS_HOST` running on port `REDIS_PORT`.
 This database needs to be the same that is used in the gateway to map a session cookie to a JWT.
 
-The following environment variables needs to be entered to this service:
+The following environment variables need to be entered into this service:
 
 - `GITHUB_CLIENT_ID` - the client secret from the _GitHub_ OAuth application.
 - `GITHUB_CLIENT_SECRET` - the client secret from the _GitHub_ OAuth application.
+- `GITHUB_ORG_IS_ADMIN`- the Github organization that will grant admin privileges.
 - `SESSION_COOKIE_NAME` - name of the session cookie.
 - `COOKIE_SIGNING` - secret that is used to sign the session cookie.
-- `SUCCESS_REDIRECT_URL` - where to redirect the user upon successfull sign in.
+- `SUCCESS_REDIRECT_URL` - where to redirect the user upon successful sign in.
 - `FAILURE_REDIRECT_URL` - where to redirect the user if authentication fails.-
-- `REDIS_HOST` - the host adress to the Redis database.
-- `REDIS_PORT` - the port on which the Redis database is listening
+- `REDIS_HOST` - the host address to the Redis database.
+- `REDIS_PORT` - the port on which the Redis database is listening.
+- `AUTH_STRATEGY`- the authentication strategy used. 
 
 ## Endpoints
 
-Default port used by the qliktive-authentication-service is `3000`.
+The default port used by the qliktive-authentication-service is `3000`.
 
 ### /login/:idp/
 
 If the specified identity provider is registered in the service it will initiate an authentication attempt with that provider.
 When the user is authenticated with the identity provider it will redirect to `/login/:idp/callback` where a signed session cookie
-(name of the cookie is specified in `SESSION_COOKIE_NAME` and the secret used for signing is defined in `COOKIE_SIGNING`) and a JWT will be issused.
-The `sessionId` and the `JWT` will be stored in a Redis database. Finally the user will be redirected to the specified `SUCCESS_REDIRECT_URL`
+(name of the cookie is specified in `SESSION_COOKIE_NAME` and the secret used for signing is defined in `COOKIE_SIGNING`) and a JWT will be issued.
+The `sessionId` and the `JWT` will be stored in a Redis database. Finally, the user will be redirected to the specified `SUCCESS_REDIRECT_URL`
 
-If the IDP responds with an authentication failure a redirect to the specified `FAILURE_REDIRECT_URL` will be issues.
+If the IDP responds with an authentication failure a redirect to the specified `FAILURE_REDIRECT_URL` will be issued.
 If an error is thrown while trying to write `sessionId` or `JWT` to the database the response to the user will be status code 500.
 
 ### /logout
