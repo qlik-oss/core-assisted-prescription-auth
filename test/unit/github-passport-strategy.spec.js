@@ -3,8 +3,8 @@ const githubPassportStrategy = require('../../src/github-passport-strategy');
 
 const accessToken = 'accessToken';
 const profile = { username: 'GithubUser' };
-const userProfile = { username: 'GithubUser', authMethod: 'github', userRole: 'User' };
-const adminProfile = { username: 'GithubUser', authMethod: 'github', userRole: 'Admin' };
+const userProfile = { username: 'GithubUser', userRole: 'User' };
+const adminProfile = { username: 'GithubUser', userRole: 'Admin' };
 
 const strategySingleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-ea' });
 const strategyMultipleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-ea;qlik-trial' });

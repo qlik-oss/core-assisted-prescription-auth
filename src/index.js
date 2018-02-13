@@ -47,7 +47,7 @@ switch (options.strategy) {
         return done(null, false);
       }
       // Local user will get User rights, change to Admin for admin rights
-      return done(null, { username, authMethod: 'local', userRole: 'User' });
+      return done(null, { username, userRole: 'User' });
     });
     break;
   default:
