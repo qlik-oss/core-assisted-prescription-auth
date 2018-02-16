@@ -46,8 +46,8 @@ switch (options.strategy) {
       } else if (accounts[username] !== password) {
         return done(null, false);
       }
-      // Local user will get User rights, change to Admin for admin rights
-      return done(null, { username, userRole: 'User' });
+      // Local user will get Admin rights, change to User to limit to user rights
+      return done(null, { username, userRole: 'Admin' });
     });
     break;
   default:
