@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const uuidV4 = require('uuid/v4');
 
 const header = {
   algorithm: 'HS256',
@@ -6,7 +7,7 @@ const header = {
 
 function getJWT(profile, jwtSecret) {
   const payload = {
-    sub: profile.username,
+    sub: uuidV4(),
     userRole: profile.userRole,
   };
   return jwt.sign(payload, jwtSecret, header);
