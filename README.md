@@ -4,7 +4,7 @@
 
 ## Status
 
-[![CircleCI](https://circleci.com/gh/qlik-ea/qliktive-authentication-service.svg?style=shield&circle-token=6cd7962488daa4db8b321d381054d2eb72f77668)](https://circleci.com/gh/qlik-ea/qliktive-authentication-service)
+[![CircleCI](https://circleci.com/gh/qlik-ea/core-assisted-prescription-auth.svg?style=shield&circle-token=6cd7962488daa4db8b321d381054d2eb72f77668)](https://circleci.com/gh/qlik-ea/core-assisted-prescription-auth)
 
 ## Overview
 
@@ -32,7 +32,7 @@ The following environment variables need to be entered into this service:
 
 ## Endpoints
 
-The default port used by the qliktive-authentication-service is `3000`.
+The default port used by the core-assisted-prescription-auth is `3000`.
 
 ### /login/:idp/
 
@@ -51,7 +51,7 @@ If any error is thrown from the database while removing `sessionId` or `JWT` a s
 
 ## Circle CI
 
-Circle CI is configured to build a new Docker image from all pushed commits on all branches of qliktive-authentication-service. As part of this, the built Docker image is pushed to Docker Hub. If pushing to a feature branch (different from `master`), the Docker image is tagged with `<version>-<build-number>`, where `<version>` is fetched from [`package.json`](./package.json), and `<build-number>` is the automatically increased Circle CI build number given to each build. If pushing to `master` the image is also tagged with `latest`.
+Circle CI is configured to build a new Docker image from all pushed commits on all branches of core-assisted-prescription-auth. As part of this, the built Docker image is pushed to Docker Hub. If pushing to a feature branch (different from `master`), the Docker image is tagged with `<version>-<build-number>`, where `<version>` is fetched from [`package.json`](./package.json), and `<build-number>` is the automatically increased Circle CI build number given to each build. If pushing to `master` the image is also tagged with `latest`.
 
 Linting of the code and some basic smoke testing is part of the job pipeline and must succeed for the docker image to be published.
 
