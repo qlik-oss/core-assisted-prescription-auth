@@ -1,5 +1,5 @@
 {
-  "name": "qliktive-authentication-service",
+  "name": "core-assisted-prescription-auth",
   "version": "0.0.1-0",
   "description": "A Qliktive Authentication Service Example",
   "author": "QlikTech International AB",
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qlik-trial/qliktive-authentication-service.git"
+    "url": "git+https://github.com/qlik-trial/core-assisted-prescription-auth.git"
   },
   "bugs": {
-    "url": "https://github.com/qlik-trial/qliktive-authentication-service/issues"
+    "url": "https://github.com/qlik-trial/core-assisted-prescription-auth/issues"
   },
-  "homepage": "https://github.com/qlik-trial/qliktive-authentication-service#readme",
+  "homepage": "https://github.com/qlik-trial/core-assisted-prescription-auth#readme",
   "devDependencies": {
     "after-work.js": "2.0.0",
     "chai-http": "3.0.0",

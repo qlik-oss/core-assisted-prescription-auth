@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:8
-    working_directory: ~/qliktive-authentication-service
+    working_directory: ~/core-assisted-prescription-auth
     environment:
       DOCKER_REPO: qlikea/qliktive-authentication-service
     steps:
