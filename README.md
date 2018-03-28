@@ -1,6 +1,6 @@
 # Authentication service
 
-**NOTE: This repository contains an example service for the [Qliktive Assisted Prescription](https://github.com/qlik-ea/qliktive-custom-analytics) use case.**
+**NOTE: This repository contains an example service for the [Qliktive Assisted Prescription](https://github.com/qlik-ea/core-assisted-prescription) use case.**
 
 ## Status
 
