@@ -8,7 +8,7 @@ services:
       SESSION_COOKIE_NAME: custom-analytics
       GITHUB_CLIENT_ID: MyClientID
       GITHUB_CLIENT_SECRET: MySecret
-      GITHUB_ORG_IS_ADMIN: qlik-trial;qlik-ea
+      GITHUB_ORG_IS_ADMIN: MyGitHubOrg
       JWT_SECRET: jwtsecret
       COOKIE_SIGNING: cookiesign
       AUTH_STRATEGY: local
