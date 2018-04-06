@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qlik-trial/core-assisted-prescription-auth.git"
+    "url": "git+https://github.com/qlik-oss/core-assisted-prescription-auth.git"
   },
   "bugs": {
-    "url": "https://github.com/qlik-trial/core-assisted-prescription-auth/issues"
+    "url": "https://github.com/qlik-oss/core-assisted-prescription-auth/issues"
   },
-  "homepage": "https://github.com/qlik-trial/core-assisted-prescription-auth#readme",
+  "homepage": "https://github.com/qlik-oss/core-assisted-prescription-auth#readme",
   "devDependencies": {
     "after-work.js": "2.0.0",
     "chai-http": "3.0.0",

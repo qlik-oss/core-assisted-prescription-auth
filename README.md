@@ -1,10 +1,10 @@
 # Authentication service
 
-**NOTE: This repository contains an example service for the [Qliktive Assisted Prescription](https://github.com/qlik-ea/core-assisted-prescription) use case.**
+**NOTE: This repository contains an example service for the [Qlik Core Assisted Prescription](https://github.com/qlik-oss/core-assisted-prescription) use case.**
 
 ## Status
 
-[![CircleCI](https://circleci.com/gh/qlik-ea/core-assisted-prescription-auth.svg?style=shield&circle-token=6cd7962488daa4db8b321d381054d2eb72f77668)](https://circleci.com/gh/qlik-ea/core-assisted-prescription-auth)
+[![CircleCI](https://circleci.com/gh/qlik-oss/core-assisted-prescription-auth.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-assisted-prescription-auth)
 
 ## Overview
 

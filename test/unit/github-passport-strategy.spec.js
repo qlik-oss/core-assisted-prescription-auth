@@ -6,8 +6,8 @@ const profile = { username: 'GithubUser' };
 const userProfile = { username: 'GithubUser', userRole: 'User' };
 const adminProfile = { username: 'GithubUser', userRole: 'Admin' };
 
-const strategySingleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-ea' });
-const strategyMultipleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-ea;qlik-trial' });
+const strategySingleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss' });
+const strategyMultipleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss;qlik-second-org' });
 const strategyNonOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: '' });
 
 describe('github-passport-strategy', () => {
@@ -18,7 +18,7 @@ describe('github-passport-strategy', () => {
 
   it('should return admin profile if 204 is returned', (done) => {
     nock('https://api.github.com')
-      .get(`/orgs/qlik-ea/members/GithubUser?access_token=${accessToken}`)
+      .get(`/orgs/qlik-oss/members/GithubUser?access_token=${accessToken}`)
       .reply(204);
 
       strategySingleOrg._verify(accessToken, undefined, profile, (a, b) => {// eslint-disable-line
@@ -29,7 +29,7 @@ describe('github-passport-strategy', () => {
 
   it('should return user profile if 401 is returned', (done) => {
     nock('https://api.github.com')
-      .get(`/orgs/qlik-ea/members/GithubUser?access_token=${accessToken}`)
+      .get(`/orgs/qlik-oss/members/GithubUser?access_token=${accessToken}`)
       .reply(401);
 
       strategySingleOrg._verify(accessToken, undefined, profile, (a, b) => { // eslint-disable-line
@@ -40,7 +40,7 @@ describe('github-passport-strategy', () => {
 
   it('should return admin profile if 204 is returned with multiple orgs', (done) => {
     nock('https://api.github.com')
-      .get(`/orgs/qlik-ea/members/GithubUser?access_token=${accessToken}`)
+      .get(`/orgs/qlik-oss/members/GithubUser?access_token=${accessToken}`)
       .reply(204);
 
       strategyMultipleOrg._verify(accessToken, undefined, profile, (a, b) => {// eslint-disable-line
