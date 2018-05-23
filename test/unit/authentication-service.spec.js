@@ -4,8 +4,6 @@ const MockStrategy = require('./mock-strategy');
 const AuthenticationService = require('../../src/authentication-service');
 const redis = require('redis-mock');
 
-const sinon = require('sinon');
-
 chai.use(ChaiHttp);
 
 let loginSuccessfull;
@@ -43,11 +41,15 @@ describe('endpoints', () => {
 
   beforeEach(() => {
     loginSuccessfull = true;
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(() => {
     sandbox.restore();
+  });
+
+  after(() => {
+    autenticationService.close();
   });
 
   describe('github', () => {
@@ -74,9 +76,7 @@ describe('endpoints', () => {
     it('should return 500 if session cannot be stored', (done) => {
       const errorMsg = 'Error in redis';
 
-      sandbox.stub(redisClient, 'set', (sessionId, jwt, callbackFn) => {
-        callbackFn(errorMsg, 0);
-      });
+      sandbox.stub(redisClient, 'set').callsFake((sessionId, jwt, callbackFn) => callbackFn(errorMsg, 0));
 
       chai.request(autenticationService).get('/login/github')
         .end((err, res) => {
@@ -139,9 +139,7 @@ describe('endpoints', () => {
 
   describe('logout', () => {
     it('should return 200', (done) => {
-      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
-        callbackFn(undefined, 1);
-      });
+      sandbox.stub(redisClient, 'del').callsFake((sessionId, callbackFn) => callbackFn(undefined, 1));
 
       chai.request(autenticationService).get('/logout')
         .end((err, res) => {
@@ -152,9 +150,7 @@ describe('endpoints', () => {
     });
 
     it('should return 200 even if session cannot be found in the database (ie. logout endpoint triggered multiple times)', (done) => {
-      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
-        callbackFn(undefined, 0);
-      });
+      sandbox.stub(redisClient, 'del').callsFake((sessionId, callbackFn) => callbackFn(undefined, 0));
 
       chai.request(autenticationService).get('/logout')
         .end((err, res) => {
@@ -167,9 +163,7 @@ describe('endpoints', () => {
     it('should return 500 if an error is throw from database', (done) => {
       const errorMsg = 'Error in redis';
 
-      sandbox.stub(redisClient, 'del', (sessionId, callbackFn) => {
-        callbackFn(errorMsg, 0);
-      });
+      sandbox.stub(redisClient, 'del').callsFake((sessionId, callbackFn) => callbackFn(errorMsg, 0));
 
       chai.request(autenticationService).get('/logout')
         .end((err, res) => {

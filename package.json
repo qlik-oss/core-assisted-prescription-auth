@@ -9,8 +9,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "test": "npm run test:unit",
-    "test:unit": "aw-test-runner ./test/unit/*.spec.js",
-    "test:unit:coverage": "aw-test-coverage --dir ./coverage/unit -- ./test/unit",
+    "test:unit": "aw node ./test/unit/*.spec.js",
+    "test:unit:coverage": "aw node -c aw.config.js --coverage ./test/unit/*.spec.js",
     "lint": "eslint .",
     "lint-fix": "eslint --fix ."
   },
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/qlik-oss/core-assisted-prescription-auth#readme",
   "devDependencies": {
-    "after-work.js": "2.0.0",
+    "after-work.js": "4.2.1",
     "chai-http": "3.0.0",
     "eslint": "4.0.0",
     "eslint-config-airbnb-base": "11.2.0",
@@ -31,12 +31,11 @@
     "let": "0.0.2",
     "nock": "9.0.13",
     "passport": "0.3.2",
-    "redis-mock": "0.17.0",
-    "sinon": "2.3.4"
+    "redis-mock": "0.17.0"
   },
   "dependencies": {
     "command-line-args": "4.0.6",
-    "jsonwebtoken": "7.4.1",
+    "jsonwebtoken": "8.2.1",
     "koa": "2.2.0",
     "koa-bodyparser": "4.2.0",
     "koa-passport": "3.0.0",
@@ -45,7 +44,7 @@
     "passport-local": "1.0.0",
     "redis": "2.7.1",
     "superagent": "3.5.2",
-    "uuid": "^3.0.1",
+    "uuid": "3.0.1",
     "winston": "2.3.1"
   },
   "engines": {
