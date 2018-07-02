@@ -27,7 +27,7 @@
     "chai-http": "3.0.0",
     "eslint": "4.0.0",
     "eslint-config-airbnb-base": "11.2.0",
-    "eslint-plugin-import": "2.3.0",
+    "eslint-plugin-import": "2.13.0",
     "let": "0.0.2",
     "nock": "9.0.13",
     "passport": "0.3.2",
