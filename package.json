@@ -39,7 +39,7 @@
     "koa": "2.2.0",
     "koa-bodyparser": "4.2.1",
     "koa-passport": "3.0.0",
-    "koa-router": "7.2.0",
+    "koa-router": "7.4.0",
     "passport-github2": "0.1.10",
     "passport-local": "1.0.0",
     "redis": "2.7.1",
