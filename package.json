@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/qlik-oss/core-assisted-prescription-auth#readme",
   "devDependencies": {
-    "after-work.js": "4.2.1",
+    "after-work.js": "4.3.2",
     "chai-http": "3.0.0",
     "eslint": "4.0.0",
     "eslint-config-airbnb-base": "11.2.0",
