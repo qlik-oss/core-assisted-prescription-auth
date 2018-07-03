@@ -6,9 +6,15 @@ const profile = { username: 'GithubUser' };
 const userProfile = { username: 'GithubUser', userRole: 'User' };
 const adminProfile = { username: 'GithubUser', userRole: 'Admin' };
 
-const strategySingleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss' });
-const strategyMultipleOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss;qlik-second-org' });
-const strategyNonOrg = githubPassportStrategy.strategy({ clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: '' });
+const strategySingleOrg = githubPassportStrategy.strategy({
+  clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss',
+});
+const strategyMultipleOrg = githubPassportStrategy.strategy({
+  clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: 'qlik-oss;qlik-second-org',
+});
+const strategyNonOrg = githubPassportStrategy.strategy({
+  clientId: 'clientId', clientSecret: 'clientSecret', port: 3000, githubOrgIsAdmin: '',
+});
 
 describe('github-passport-strategy', () => {
   it('should verify inputs - remove if this test causes issues (only for development)', () => {
