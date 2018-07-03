@@ -30,7 +30,7 @@
     "eslint-plugin-import": "2.13.0",
     "let": "0.0.2",
     "nock": "9.4.1",
-    "passport": "0.3.2",
+    "passport": "0.4.0",
     "redis-mock": "0.17.0"
   },
   "dependencies": {
