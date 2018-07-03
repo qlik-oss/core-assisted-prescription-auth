@@ -1,8 +1,8 @@
-const AuthenticationService = require('./authentication-service');
-const githubPassportStrategy = require('./github-passport-strategy');
 const LocalPassportStrategy = require('passport-local').Strategy;
 const commandLineArgs = require('command-line-args');
 const fs = require('fs');
+const githubPassportStrategy = require('./github-passport-strategy');
+const AuthenticationService = require('./authentication-service');
 
 const options = commandLineArgs([
   { name: 'strategy', type: String, defaultValue: process.env.AUTH_STRATEGY || 'local' },
@@ -25,8 +25,8 @@ if (options.localAccountsFile) {
   const contents = fs.readFileSync(options.localAccountsFile).toString();
   const lines = contents.split(/\r?\n/); // handle both windows and linux newlines
   for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i].split(':');
-    accounts[line[0]] = line[1];
+    const [user, pass] = lines[i].split(':');
+    accounts[user] = pass;
   }
 }
 
@@ -43,7 +43,7 @@ switch (options.strategy) {
     strategy = new LocalPassportStrategy((username, password, done) => {
       if (!accounts[username]) {
         return done(null, false);
-      } else if (accounts[username] !== password) {
+      } if (accounts[username] !== password) {
         return done(null, false);
       }
       // Local user will get Admin rights, change to User to limit to user rights
@@ -65,4 +65,3 @@ AuthenticationService.initialize({
   redisHost: options.redisHost,
   redisPort: options.redisPort,
 });
-

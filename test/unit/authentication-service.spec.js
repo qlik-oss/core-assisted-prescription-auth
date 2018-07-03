@@ -1,8 +1,8 @@
 const ChaiHttp = require('chai-http');
 
+const redis = require('redis-mock');
 const MockStrategy = require('./mock-strategy');
 const AuthenticationService = require('../../src/authentication-service');
-const redis = require('redis-mock');
 
 chai.use(ChaiHttp);
 
@@ -20,8 +20,7 @@ const mockStrategy = new MockStrategy({
   } else {
     done(null, false);
   }
-},
-);
+});
 
 const redisClient = redis.createClient();
 

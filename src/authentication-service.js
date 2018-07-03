@@ -3,20 +3,19 @@ const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const passport = require('koa-passport');
 const uuidV4 = require('uuid/v4');
+const redis = require('redis');
 
 const logger = require('./logger/logger').get();
-const redis = require('redis');
 
 const getJWT = require('./jwt');
 
 function initiate(opt) {
   const options = opt;
-  const passportStrategy = options.strategy;
-  const scope = options.scope;
+  const { scope, strategy } = options;
 
   // TODO: Populate setting + credentials???
 
-  passport.use(passportStrategy);
+  passport.use(strategy);
 
   // passport.serializeUser((user, done) => {
   //   done(null, user);
@@ -34,7 +33,7 @@ function initiate(opt) {
   }
 
   function validStrategy(idp) {
-    return passportStrategy.name === idp;
+    return strategy.name === idp;
   }
 
   function getRedisClient() {
@@ -113,7 +112,7 @@ function initiate(opt) {
   });
 
   router.get('/idp', (ctx) => {
-    ctx.response.body = passportStrategy.name;
+    ctx.response.body = strategy.name;
   });
 
   router.get('/login/local', (ctx) => {

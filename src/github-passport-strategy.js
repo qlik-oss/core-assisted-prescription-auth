@@ -31,8 +31,10 @@ function githubPassportStrategy(options) {
       clientID: options.clientId,
       clientSecret: options.clientSecret,
     },
-    (accessToken, refreshToken, profile, done) =>
-      approvedMember(options, accessToken, profile, done));
+    (accessToken, refreshToken, profile, done) => approvedMember(
+      options, accessToken, profile, done,
+    ),
+  );
 }
 
 function getScope() {
