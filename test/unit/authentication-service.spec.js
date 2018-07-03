@@ -65,7 +65,7 @@ describe('endpoints', () => {
     it('should respond to /login/github and redirect to failed if login is unsuccessfull', (done) => {
       loginSuccessfull = false;
 
-      chai.request(autenticationService).get('/login/github')
+      chai.request(autenticationService).keepOpen().get('/login/github')
         .end((err, res) => {
           expect(res).to.redirectTo('http://localhost:3000/login/github/failed');
           expect(res.status).to.eql(200);
@@ -78,7 +78,7 @@ describe('endpoints', () => {
 
       sandbox.stub(redisClient, 'set').callsFake((sessionId, jwt, callbackFn) => callbackFn(errorMsg, 0));
 
-      chai.request(autenticationService).get('/login/github')
+      chai.request(autenticationService).keepOpen().get('/login/github')
         .end((err, res) => {
           expect(res.status).to.eql(500);
           done();
