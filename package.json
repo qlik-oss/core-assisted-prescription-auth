@@ -42,7 +42,7 @@
     "koa-router": "7.4.0",
     "passport-github2": "0.1.10",
     "passport-local": "1.0.0",
-    "redis": "2.7.1",
+    "redis": "2.8.0",
     "superagent": "3.8.3",
     "uuid": "3.3.2",
     "winston": "3.0.0"
