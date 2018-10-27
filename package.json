@@ -25,18 +25,18 @@
   "devDependencies": {
     "after-work.js": "4.3.2",
     "chai-http": "4.2.0",
-    "eslint": "5.7.0",
+    "eslint": "5.8.0",
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "let": "0.0.2",
     "nock": "10.0.1",
     "passport": "0.4.0",
-    "redis-mock": "0.33.0"
+    "redis-mock": "0.34.1"
   },
   "dependencies": {
     "command-line-args": "5.0.2",
     "jsonwebtoken": "8.3.0",
-    "koa": "2.5.3",
+    "koa": "2.6.1",
     "koa-bodyparser": "4.2.1",
     "koa-passport": "4.1.1",
     "koa-router": "7.4.0",
