@@ -31,7 +31,7 @@
     "let": "0.0.2",
     "nock": "10.0.1",
     "passport": "0.4.0",
-    "redis-mock": "0.34.1"
+    "redis-mock": "0.37.0"
   },
   "dependencies": {
     "command-line-args": "5.0.2",
