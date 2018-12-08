@@ -29,9 +29,9 @@
     "eslint-config-airbnb-base": "13.1.0",
     "eslint-plugin-import": "2.14.0",
     "let": "0.0.2",
-    "nock": "10.0.2",
+    "nock": "10.0.4",
     "passport": "0.4.0",
-    "redis-mock": "0.40.0"
+    "redis-mock": "0.41.0"
   },
   "dependencies": {
     "command-line-args": "5.0.2",
