@@ -34,7 +34,7 @@
     "redis-mock": "0.43.0"
   },
   "dependencies": {
-    "command-line-args": "5.1.0",
+    "command-line-args": "5.1.1",
     "jsonwebtoken": "8.5.1",
     "koa": "2.7.0",
     "koa-bodyparser": "4.2.1",
