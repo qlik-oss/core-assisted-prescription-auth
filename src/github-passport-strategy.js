@@ -3,14 +3,14 @@ const httpLibrary = require('superagent');
 const logger = require('./logger/logger').get();
 
 async function approvedMember(options, accessToken, profile, done) {
-  const userProfile = Object.assign({}, profile, { userRole: 'User' });
+  const userProfile = { ...profile, userRole: 'User' };
 
   // If no organisation is defined as admin, all will be granted admin rights
   if (options.githubOrgIsAdmin) {
     const adminOrganisations = options.githubOrgIsAdmin.split(';');
-    const req = adminOrganisations.map(org => httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch(result => Promise.resolve(result)));
+    const req = adminOrganisations.map((org) => httpLibrary.get(`https://api.github.com/orgs/${org}/members/${profile.username}?access_token=${accessToken}`).catch((result) => Promise.resolve(result)));
     const results = await Promise.all(req);
-    const isMember = results.some(result => result.noContent);
+    const isMember = results.some((result) => result.noContent);
 
     if (isMember) {
       userProfile.userRole = 'Admin';
