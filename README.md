@@ -1,5 +1,8 @@
 # Authentication service
 
+# This project has been deprecated
+The project will be kept here for reference only. The repo will not be continuously updated and supported. 
+
 **NOTE: This repository contains an example service for the [Qlik Core Assisted Prescription](https://github.com/qlik-oss/core-assisted-prescription) use case.**
 
 ## Status
